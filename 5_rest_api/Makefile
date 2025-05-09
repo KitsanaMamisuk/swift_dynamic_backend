@@ -40,3 +40,6 @@ reset-db: .reset-db .migrate-migrations
 
 init_data:
 	docker-compose run --rm django python manage.py init_data
+
+gen-swagger-json:
+	docker-compose exec django python manage.py generate_swagger --format json --output api-docs.json
