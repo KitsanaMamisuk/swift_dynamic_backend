@@ -3,13 +3,6 @@
   "info": {
     "title": "API Documentation",
     "description": "API documentation",
-    "termsOfService": "https://www.yourapp.com/terms/",
-    "contact": {
-      "email": "contact@yourapp.com"
-    },
-    "license": {
-      "name": "Your License"
-    },
     "version": "v1"
   },
   "host": "localhost",
@@ -23,17 +16,151 @@
   "produces": [
     "application/json"
   ],
-  "securityDefinitions": {
-    "Basic": {
-      "type": "basic"
-    }
-  },
-  "security": [
-    {
-      "Basic": []
-    }
-  ],
   "paths": {
+    "/classroom/": {
+      "get": {
+        "operationId": "classroom_list",
+        "description": "",
+        "parameters": [
+          {
+            "name": "school",
+            "in": "query",
+            "description": "Room of school",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Classroom"
+              }
+            }
+          }
+        },
+        "tags": [
+          "classroom"
+        ]
+      },
+      "post": {
+        "operationId": "classroom_create",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ClassroomCreate"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ClassroomCreate"
+            }
+          }
+        },
+        "tags": [
+          "classroom"
+        ]
+      },
+      "parameters": []
+    },
+    "/classroom/{id}/": {
+      "get": {
+        "operationId": "classroom_read",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ClassroomDetail"
+            }
+          }
+        },
+        "tags": [
+          "classroom"
+        ]
+      },
+      "put": {
+        "operationId": "classroom_update",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ClassroomCreate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ClassroomCreate"
+            }
+          }
+        },
+        "tags": [
+          "classroom"
+        ]
+      },
+      "patch": {
+        "operationId": "classroom_partial_update",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ClassroomCreate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ClassroomCreate"
+            }
+          }
+        },
+        "tags": [
+          "classroom"
+        ]
+      },
+      "delete": {
+        "operationId": "classroom_delete",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "classroom"
+        ]
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
     "/school/": {
       "get": {
         "operationId": "school_list",
@@ -42,7 +169,7 @@
           {
             "name": "name",
             "in": "query",
-            "description": "name",
+            "description": "Name of school",
             "required": false,
             "type": "string"
           }
@@ -177,9 +304,546 @@
           "type": "string"
         }
       ]
+    },
+    "/student/": {
+      "get": {
+        "operationId": "student_list",
+        "description": "",
+        "parameters": [
+          {
+            "name": "classroom",
+            "in": "query",
+            "description": "Classroom",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "school",
+            "in": "query",
+            "description": "Name of school",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "first_name",
+            "in": "query",
+            "description": "First Name",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "last_name",
+            "in": "query",
+            "description": "Last Name",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "gender",
+            "in": "query",
+            "description": "Gender",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Student"
+              }
+            }
+          }
+        },
+        "tags": [
+          "student"
+        ]
+      },
+      "post": {
+        "operationId": "student_create",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StudentCreate"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/StudentCreate"
+            }
+          }
+        },
+        "tags": [
+          "student"
+        ]
+      },
+      "parameters": []
+    },
+    "/student/{id}/": {
+      "get": {
+        "operationId": "student_read",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/StudentDetail"
+            }
+          }
+        },
+        "tags": [
+          "student"
+        ]
+      },
+      "put": {
+        "operationId": "student_update",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StudentCreate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/StudentCreate"
+            }
+          }
+        },
+        "tags": [
+          "student"
+        ]
+      },
+      "patch": {
+        "operationId": "student_partial_update",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StudentCreate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/StudentCreate"
+            }
+          }
+        },
+        "tags": [
+          "student"
+        ]
+      },
+      "delete": {
+        "operationId": "student_delete",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "student"
+        ]
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "/teacher/": {
+      "get": {
+        "operationId": "teacher_list",
+        "description": "",
+        "parameters": [
+          {
+            "name": "classroom",
+            "in": "query",
+            "description": "Classroom",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "school",
+            "in": "query",
+            "description": "Name of school",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "first_name",
+            "in": "query",
+            "description": "First Name",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "last_name",
+            "in": "query",
+            "description": "Last Name",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "gender",
+            "in": "query",
+            "description": "Gender",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Teacher"
+              }
+            }
+          }
+        },
+        "tags": [
+          "teacher"
+        ]
+      },
+      "post": {
+        "operationId": "teacher_create",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TeacherCreate"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/TeacherCreate"
+            }
+          }
+        },
+        "tags": [
+          "teacher"
+        ]
+      },
+      "parameters": []
+    },
+    "/teacher/{id}/": {
+      "get": {
+        "operationId": "teacher_read",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/TeacherDetail"
+            }
+          }
+        },
+        "tags": [
+          "teacher"
+        ]
+      },
+      "put": {
+        "operationId": "teacher_update",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TeacherCreate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/TeacherCreate"
+            }
+          }
+        },
+        "tags": [
+          "teacher"
+        ]
+      },
+      "patch": {
+        "operationId": "teacher_partial_update",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TeacherCreate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/TeacherCreate"
+            }
+          }
+        },
+        "tags": [
+          "teacher"
+        ]
+      },
+      "delete": {
+        "operationId": "teacher_delete",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "teacher"
+        ]
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ]
     }
   },
   "definitions": {
+    "Classroom": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "grade": {
+          "title": "Grade",
+          "type": "string",
+          "enum": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6"
+          ]
+        },
+        "room": {
+          "title": "Room",
+          "type": "string",
+          "enum": [
+            "1/1",
+            "1/2",
+            "1/3",
+            "2/1",
+            "2/2",
+            "2/3",
+            "3/1",
+            "3/2",
+            "3/3",
+            "4/1",
+            "4/2",
+            "4/3",
+            "5/1",
+            "5/2",
+            "5/3",
+            "6/1",
+            "6/2",
+            "6/3"
+          ]
+        },
+        "school": {
+          "required": [
+            "name",
+            "short_name",
+            "address"
+          ],
+          "type": "object",
+          "properties": {
+            "id": {
+              "title": "ID",
+              "type": "integer",
+              "readOnly": true
+            },
+            "name": {
+              "title": "Name",
+              "type": "string",
+              "maxLength": 255,
+              "minLength": 1
+            },
+            "short_name": {
+              "title": "Short name",
+              "type": "string",
+              "maxLength": 255,
+              "minLength": 1
+            },
+            "address": {
+              "title": "Address",
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "readOnly": true
+        }
+      }
+    },
+    "ClassroomCreate": {
+      "required": [
+        "school"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "grade": {
+          "title": "Grade",
+          "type": "string",
+          "enum": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6"
+          ]
+        },
+        "room": {
+          "title": "Room",
+          "type": "string",
+          "enum": [
+            "1/1",
+            "1/2",
+            "1/3",
+            "2/1",
+            "2/2",
+            "2/3",
+            "3/1",
+            "3/2",
+            "3/3",
+            "4/1",
+            "4/2",
+            "4/3",
+            "5/1",
+            "5/2",
+            "5/3",
+            "6/1",
+            "6/2",
+            "6/3"
+          ]
+        },
+        "school": {
+          "title": "School",
+          "type": "integer"
+        }
+      }
+    },
+    "ClassroomDetail": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "grade": {
+          "title": "Grade",
+          "type": "string",
+          "enum": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6"
+          ]
+        },
+        "room": {
+          "title": "Room",
+          "type": "string",
+          "enum": [
+            "1/1",
+            "1/2",
+            "1/3",
+            "2/1",
+            "2/2",
+            "2/3",
+            "3/1",
+            "3/2",
+            "3/3",
+            "4/1",
+            "4/2",
+            "4/3",
+            "5/1",
+            "5/2",
+            "5/3",
+            "6/1",
+            "6/2",
+            "6/3"
+          ]
+        },
+        "school": {
+          "title": "School",
+          "type": "string",
+          "readOnly": true
+        },
+        "list_of_teacher": {
+          "title": "List of teacher",
+          "type": "string",
+          "readOnly": true
+        },
+        "list_of_student": {
+          "title": "List of student",
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
     "School": {
       "required": [
         "name",
@@ -254,6 +918,279 @@
         },
         "student_count": {
           "title": "Student count",
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "Student": {
+      "required": [
+        "first_name",
+        "last_name"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "first_name": {
+          "title": "First name",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "last_name": {
+          "title": "Last name",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "gender": {
+          "title": "Gender",
+          "type": "string",
+          "enum": [
+            "M",
+            "F",
+            "O"
+          ]
+        },
+        "classroom": {
+          "title": "Classroom",
+          "type": "string",
+          "readOnly": true
+        },
+        "school": {
+          "title": "School",
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "StudentCreate": {
+      "required": [
+        "first_name",
+        "last_name",
+        "classroom",
+        "school"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "first_name": {
+          "title": "First name",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "last_name": {
+          "title": "Last name",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "gender": {
+          "title": "Gender",
+          "type": "string",
+          "enum": [
+            "M",
+            "F",
+            "O"
+          ]
+        },
+        "classroom": {
+          "title": "Classroom",
+          "type": "integer"
+        },
+        "school": {
+          "title": "School",
+          "type": "integer"
+        }
+      }
+    },
+    "StudentDetail": {
+      "required": [
+        "first_name",
+        "last_name"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "first_name": {
+          "title": "First name",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "last_name": {
+          "title": "Last name",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "gender": {
+          "title": "Gender",
+          "type": "string",
+          "enum": [
+            "M",
+            "F",
+            "O"
+          ]
+        },
+        "school": {
+          "title": "School",
+          "type": "string",
+          "readOnly": true
+        },
+        "classroom_detail": {
+          "title": "Classroom detail",
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "Teacher": {
+      "required": [
+        "first_name",
+        "last_name"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "first_name": {
+          "title": "First name",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "last_name": {
+          "title": "Last name",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "gender": {
+          "title": "Gender",
+          "type": "string",
+          "enum": [
+            "M",
+            "F",
+            "O"
+          ]
+        },
+        "school": {
+          "title": "School",
+          "type": "string",
+          "readOnly": true
+        },
+        "classrooms": {
+          "title": "Classrooms",
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "TeacherCreate": {
+      "required": [
+        "first_name",
+        "last_name",
+        "school",
+        "classrooms"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "first_name": {
+          "title": "First name",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "last_name": {
+          "title": "Last name",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "gender": {
+          "title": "Gender",
+          "type": "string",
+          "enum": [
+            "M",
+            "F",
+            "O"
+          ]
+        },
+        "school": {
+          "title": "School",
+          "type": "integer"
+        },
+        "classrooms": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "TeacherDetail": {
+      "required": [
+        "first_name",
+        "last_name"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "first_name": {
+          "title": "First name",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "last_name": {
+          "title": "Last name",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "gender": {
+          "title": "Gender",
+          "type": "string",
+          "enum": [
+            "M",
+            "F",
+            "O"
+          ]
+        },
+        "school": {
+          "title": "School",
+          "type": "string",
+          "readOnly": true
+        },
+        "list_of_classroom": {
+          "title": "List of classroom",
           "type": "string",
           "readOnly": true
         }

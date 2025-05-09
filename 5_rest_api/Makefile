@@ -43,3 +43,6 @@ init_data:
 
 gen-swagger-json:
 	docker-compose exec django python manage.py generate_swagger --format json --output api-docs.json
+
+collectstatic:
+	docker-compose exec django python manage.py collectstatic

@@ -1,9 +1,7 @@
 from rest_framework import serializers
-
+from .models import School, Classroom, Teacher, Student
 
 # code here
-from rest_framework import serializers
-from .models import School, Classroom, Teacher, Student
 
 
 class SchoolSerializer(serializers.ModelSerializer):
@@ -23,11 +21,6 @@ class SchoolDetailSerializer(SchoolSerializer):
 
 
 class ClassroomSerializer(serializers.ModelSerializer):
-    school = serializers.PrimaryKeyRelatedField(
-        queryset=School.objects.all(), write_only=True
-    )
-    school_detail = SchoolSerializer(source='school', read_only=True)
-
     class Meta:
         model = Classroom
         fields = [
@@ -35,21 +28,37 @@ class ClassroomSerializer(serializers.ModelSerializer):
             'grade',
             'room',
             'school',
-            'school_detail',
+        ]
+        depth = 1
+
+
+class ClassroomCreateSerializer(ClassroomSerializer):
+    school = serializers.PrimaryKeyRelatedField(
+        queryset=School.objects.all(), write_only=True
+    )
+
+
+class ClassroomDetailSerializer(ClassroomSerializer):
+    school = serializers.ReadOnlyField(source='school.name')
+
+    class Meta(ClassroomSerializer.Meta):
+        fields = [
+            'id',
+            'grade',
+            'room',
+            'school',
+            'list_of_teacher',
+            'list_of_student',
         ]
 
 
 class TeacherSerializer(serializers.ModelSerializer):
-    classroom = serializers.PrimaryKeyRelatedField(
-        queryset=Classroom.objects.all(), write_only=True
-    )
-    classroom_detail = ClassroomSerializer(
-        source='classroom', read_only=True, many=True
-    )
-    school = serializers.PrimaryKeyRelatedField(
-        queryset=School.objects.all(), write_only=True
-    )
-    school_detail = SchoolSerializer(source='school', read_only=True)
+    school = serializers.ReadOnlyField(source='school.name')
+    classrooms = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_classrooms(obj):
+        return [classroom.room for classroom in obj.classrooms.all()]
 
     class Meta:
         model = Teacher
@@ -58,42 +67,53 @@ class TeacherSerializer(serializers.ModelSerializer):
             'first_name',
             'last_name',
             'gender',
-            'classroom',
-            'classroom_detail',
             'school',
-            'school_detail',
+            'classrooms',
         ]
 
+
+class TeacherDetailSerializer(TeacherSerializer):
+    class Meta(TeacherSerializer.Meta):
+        fields = [
+            'id',
+            'first_name',
+            'last_name',
+            'gender',
+            'school',
+            'list_of_classroom',
+        ]
+
+
+class TeacherCreateSerializer(TeacherSerializer):
+    classrooms = serializers.PrimaryKeyRelatedField(
+        queryset=Classroom.objects.all(), write_only=True, many=True, allow_empty=True
+    )
+    school = serializers.PrimaryKeyRelatedField(
+        queryset=School.objects.all(), write_only=True
+    )
+
     def create(self, validated_data):
-        classroom_ids = validated_data.pop('classroom')
+        classroom_ids = validated_data.pop('classrooms')
         teacher = Teacher.objects.create(**validated_data)
-        for classroom_id in classroom_ids:
-            classroom = Classroom.objects.get(pk=classroom_id)
-            if not classroom:
-                raise serializers.ValidationError({'detail': 'Classroom not found'})
-            teacher.classroom.add(classroom)
+        if not classroom_ids:
+            raise serializers.ValidationError({'detail': 'Classroom not found'})
+        for classroom in classroom_ids:
+            teacher.classrooms.add(classroom)
         return teacher
 
     def update(self, instance, validated_data):
-        classroom_ids = validated_data.pop('classroom')
-        instance.classroom.clear()
-        for classroom_id in classroom_ids:
-            classroom = Classroom.objects.get(pk=classroom_id)
-            if not classroom:
-                raise serializers.ValidationError({'detail': 'Classroom not found'})
-            instance.classroom.add(classroom)
+        classroom_ids = validated_data.pop('classrooms')
+        if not classroom_ids:
+            raise serializers.ValidationError({'detail': 'Classroom not found'})
+        instance.classrooms.clear()
+        for classroom in classroom_ids:
+            instance.classrooms.add(classroom)
         return super().update(instance, validated_data)
 
 
 class StudentSerializer(serializers.ModelSerializer):
-    classroom = serializers.PrimaryKeyRelatedField(
-        queryset=Classroom.objects.all(), write_only=True
-    )
-    classroom_detail = ClassroomSerializer(source='classroom', read_only=True)
-    school = serializers.PrimaryKeyRelatedField(
-        queryset=School.objects.all(), write_only=True
-    )
-    school_detail = SchoolSerializer(source='school', read_only=True)
+    classroom = serializers.ReadOnlyField(source='classroom.room')
+    school = serializers.ReadOnlyField(source='school.name')
 
     class Meta:
         model = Student
@@ -103,7 +123,40 @@ class StudentSerializer(serializers.ModelSerializer):
             'last_name',
             'gender',
             'classroom',
-            'classroom_detail',
             'school',
-            'school_detail',
         ]
+
+
+class StudentDetailSerializer(StudentSerializer):
+    class Meta(StudentSerializer.Meta):
+        fields = [
+            'id',
+            'first_name',
+            'last_name',
+            'gender',
+            'school',
+            'classroom_detail',
+        ]
+
+
+class StudentCreateSerializer(StudentSerializer):
+    classroom = serializers.PrimaryKeyRelatedField(
+        queryset=Classroom.objects.all(), write_only=True
+    )
+    school = serializers.PrimaryKeyRelatedField(
+        queryset=School.objects.all(), write_only=True
+    )
+
+    def create(self, validated_data):
+        classroom = validated_data.pop('classroom')
+        if not classroom:
+            raise serializers.ValidationError({'detail': 'Classroom not found'})
+        student = Student.objects.create(classroom=classroom, **validated_data)
+        return student
+
+    def update(self, instance, validated_data):
+        classroom = validated_data.pop('classroom')
+        if not classroom:
+            raise serializers.ValidationError({'detail': 'Classroom not found'})
+        instance.classroom_id = classroom.id
+        return super().update(instance, validated_data)
