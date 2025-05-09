@@ -1,0 +1,29 @@
+services:
+  django:
+    build: 
+      context: ./
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+    volumes:
+      - ./:/opt/app
+    ports:
+      - 8000:8000
+    command: tail -f /dev/null
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=P@ssw0rd
+      - POSTGRES_DB=db_school
+      
+  
+  postgres:
+    image: postgres:17-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - ./_docker_volumes/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=P@ssw0rd
+      - POSTGRES_DB=db_school
+      

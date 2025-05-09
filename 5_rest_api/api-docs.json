@@ -1,0 +1,263 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "API Documentation",
+    "description": "API documentation",
+    "termsOfService": "https://www.yourapp.com/terms/",
+    "contact": {
+      "email": "contact@yourapp.com"
+    },
+    "license": {
+      "name": "Your License"
+    },
+    "version": "v1"
+  },
+  "host": "localhost",
+  "schemes": [
+    "http"
+  ],
+  "basePath": "/api/v1",
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "securityDefinitions": {
+    "Basic": {
+      "type": "basic"
+    }
+  },
+  "security": [
+    {
+      "Basic": []
+    }
+  ],
+  "paths": {
+    "/school/": {
+      "get": {
+        "operationId": "school_list",
+        "description": "",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "name",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/School"
+              }
+            }
+          }
+        },
+        "tags": [
+          "school"
+        ]
+      },
+      "post": {
+        "operationId": "school_create",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/School"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/School"
+            }
+          }
+        },
+        "tags": [
+          "school"
+        ]
+      },
+      "parameters": []
+    },
+    "/school/{id}/": {
+      "get": {
+        "operationId": "school_read",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/SchoolDetail"
+            }
+          }
+        },
+        "tags": [
+          "school"
+        ]
+      },
+      "put": {
+        "operationId": "school_update",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/School"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/School"
+            }
+          }
+        },
+        "tags": [
+          "school"
+        ]
+      },
+      "patch": {
+        "operationId": "school_partial_update",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/School"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/School"
+            }
+          }
+        },
+        "tags": [
+          "school"
+        ]
+      },
+      "delete": {
+        "operationId": "school_delete",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "school"
+        ]
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    }
+  },
+  "definitions": {
+    "School": {
+      "required": [
+        "name",
+        "short_name",
+        "address"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "name": {
+          "title": "Name",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "short_name": {
+          "title": "Short name",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "address": {
+          "title": "Address",
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "SchoolDetail": {
+      "required": [
+        "name",
+        "short_name",
+        "address"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "name": {
+          "title": "Name",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "short_name": {
+          "title": "Short name",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "address": {
+          "title": "Address",
+          "type": "string",
+          "minLength": 1
+        },
+        "classroom_count": {
+          "title": "Classroom count",
+          "type": "string",
+          "readOnly": true
+        },
+        "teacher_count": {
+          "title": "Teacher count",
+          "type": "string",
+          "readOnly": true
+        },
+        "student_count": {
+          "title": "Student count",
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    }
+  }
+}
