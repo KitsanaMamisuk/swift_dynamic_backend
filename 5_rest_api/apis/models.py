@@ -35,7 +35,8 @@ class Teacher(models.Model):
     last_name = models.CharField(max_length=255)
     gender = models.CharField(choices=Gender.choices, default=Gender.MALE)
     school = models.ForeignKey(
-        School, on_delete=models.CASCADE, related_name='teachers'
+        School, on_delete=models.SET_NULL, related_name='teachers',
+        null=True
     )
 
     def __str__(self):
@@ -61,7 +62,8 @@ class Classroom(models.Model):
     grade = models.CharField(choices=Grade.choices, default=Grade.GRADE_ONE)
     room = models.CharField(choices=Room.choices, default=Room.GRADE_ONE_ROOM_ONE)
     school = models.ForeignKey(
-        School, on_delete=models.CASCADE, related_name='classrooms'
+        School, on_delete=models.SET_NULL, related_name='classrooms',
+        null=True
     )
     teacher = models.ManyToManyField(Teacher, related_name='classrooms')
 
@@ -98,10 +100,12 @@ class Student(models.Model):
     last_name = models.CharField(max_length=255)
     gender = models.CharField(choices=Gender.choices, default=Gender.MALE)
     classroom = models.ForeignKey(
-        Classroom, on_delete=models.CASCADE, related_name='students'
+        Classroom, on_delete=models.SET_NULL, related_name='students',
+        null=True
     )
     school = models.ForeignKey(
-        School, on_delete=models.CASCADE, related_name='students'
+        School, on_delete=models.SET_NULL, related_name='students',
+        null=True
     )
 
     def __str__(self):
